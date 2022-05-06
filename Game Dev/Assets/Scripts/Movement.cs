@@ -8,13 +8,16 @@ public class Movement : MonoBehaviour
     float dirX; //dirX = Direction
     public float moveSpeed = 10f, jumpForce = 700f;
 
+    [SerializeField] private LayerMask platformLayerMask;
     private Animator anim;
+    private BoxCollider2D boxCollider2D;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         rD = GetComponent<Rigidbody2D>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frames
@@ -51,6 +54,16 @@ public class Movement : MonoBehaviour
     }
     public void DoJump()
     {
+        if (IsGrounded())
+        {
             rD.AddForce(transform.up * jumpForce);
+        }
+            
+    }
+
+    public bool IsGrounded()
+    {
+        RaycastHit2D raycastHit2d = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, .05f, platformLayerMask);
+        return raycastHit2d.collider != null;
     }
 }
