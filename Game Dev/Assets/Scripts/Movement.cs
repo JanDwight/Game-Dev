@@ -27,7 +27,10 @@ public class Movement : MonoBehaviour
         rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
 
         if (SimpleInput.GetButtonDown("Jump"))
+        {
             DoJump();
+        }
+            
 
         if(dirX == 0)
         {
@@ -51,19 +54,32 @@ public class Movement : MonoBehaviour
     void FixedUpdate()
     {
         rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
+        JumpAnim();
     }
+
     public void DoJump()
     {
         if (IsGrounded())
         {
             rD.AddForce(transform.up * jumpForce);
-        }
-            
+        }     
     }
 
     public bool IsGrounded()
     {
-        RaycastHit2D raycastHit2d = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, .05f, platformLayerMask);
+        RaycastHit2D raycastHit2d = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, .07f, platformLayerMask);
         return raycastHit2d.collider != null;
+    }
+
+    private void JumpAnim()
+    {
+        if (!IsGrounded())
+        {
+            anim.SetBool("isJumping", true);
+        }
+        else
+        {
+            anim.SetBool("isJumping", false);
+        }
     }
 }
