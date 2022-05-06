@@ -6,7 +6,7 @@ public class Movement : MonoBehaviour
 {
     Rigidbody2D rD;
     float dirX; //dirX = Direction
-    public float moveSpeed = 10f, jumpForce = 700f;
+    public float moveSpeed = 10f, jumpForce = 200f;
 
     [SerializeField] private LayerMask platformLayerMask;
     private Animator anim;
