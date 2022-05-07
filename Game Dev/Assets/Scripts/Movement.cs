@@ -6,11 +6,15 @@ public class Movement : MonoBehaviour
 {
     Rigidbody2D rD;
     float dirX; //dirX = Direction
+    
     public float moveSpeed = 10f, jumpForce = 200f;
 
     [SerializeField] private LayerMask platformLayerMask;
+    [SerializeField] private LayerMask ladderLayerMask;
     private Animator anim;
     private BoxCollider2D boxCollider2D;
+    public float raydistance;
+    private bool isClimbing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,15 +27,13 @@ public class Movement : MonoBehaviour
     // Update is called once per frames
     void Update()
     {
-        dirX = SimpleInput.GetAxis("Horizontal") ;
+        dirX = SimpleInput.GetAxis("Horizontal");
         rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
 
-        if (SimpleInput.GetButtonDown("Jump"))
-        {
-            DoJump();
-        }
+        
+       
             
-
+        // For Running Animation Que
         if(dirX == 0)
         {
             anim.SetBool("isRunning", false);
@@ -41,6 +43,7 @@ public class Movement : MonoBehaviour
             anim.SetBool("isRunning", true);
         }
 
+        // Where do the Character face, Left or Right?
         if (SimpleInput.GetAxis("Horizontal") < 0)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -49,19 +52,24 @@ public class Movement : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+
+
     }
 
     void FixedUpdate()
     {
         rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
         JumpAnim();
+        Climb();
+
     }
 
     public void DoJump()
     {
         if (IsGrounded())
         {
-            rD.AddForce(transform.up * jumpForce);
+            rD.velocity = Vector2.up * jumpForce;
+            Debug.Log("Jump");
         }     
     }
 
@@ -80,6 +88,33 @@ public class Movement : MonoBehaviour
         else
         {
             anim.SetBool("isJumping", false);
+        }
+    }
+
+    public void Climb()
+    {
+        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, Vector2.up, raydistance, ladderLayerMask);
+        if (hitinfo.collider != null)
+        {
+            if (SimpleInput.GetButton("Jump"))
+            {
+                isClimbing = true;
+            }
+        }
+        else
+        {
+            isClimbing = false;
+        }
+
+        if (isClimbing == true)
+        {
+            float inputClimb = SimpleInput.GetAxis("Vertical");
+            rD.velocity = new Vector2(inputClimb * moveSpeed, rD.position.x);
+            rD.gravityScale = 0;
+        }
+        else
+        {
+            rD.gravityScale = 1;
         }
     }
 }

@@ -2317,6 +2317,10 @@ MonoBehaviour:
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  ladderLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  raydistance: 5
 --- !u!61 &-9203089263594495191
 BoxCollider2D:
   m_ObjectHideFlags: 0
