@@ -4,24 +4,26 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+
     Rigidbody2D rD;
     float dirX; //dirX = Direction
-    
     public float moveSpeed = 10f, jumpForce = 200f;
-
+    public float distance = 1f;
+    public LayerMask boxMask;
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private LayerMask ladderLayerMask;
     private Animator anim;
     private BoxCollider2D boxCollider2D;
     public float raydistance;
     private bool isClimbing = false;
-
+    GameObject box;
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         rD = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+
     }
 
     // Update is called once per frames
@@ -29,12 +31,13 @@ public class Movement : MonoBehaviour
     {
         dirX = SimpleInput.GetAxis("Horizontal");
         rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
+        Physics2D.queriesStartInColliders = false;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, distance, boxMask);
 
-        
-       
-            
+
+
         // For Running Animation Que
-        if(dirX == 0)
+        if (dirX == 0)
         {
             anim.SetBool("isRunning", false);
         }
@@ -52,7 +55,11 @@ public class Movement : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+        if (hit.collider != null && hit.collider.gameObject.tag == "pushable" && Input.GetKey(KeyCode.E))
+        {
+            box = hit.collider.gameObject;
 
+        }
 
     }
 
@@ -61,7 +68,7 @@ public class Movement : MonoBehaviour
         rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
         JumpAnim();
         Climb();
-
+ 
     }
 
     public void DoJump()
@@ -116,5 +123,7 @@ public class Movement : MonoBehaviour
         {
             rD.gravityScale = 1;
         }
-    }
+
+  
+}
 }
