@@ -5,7 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     Rigidbody2D rD;
-    float dirX; //dirX = Direction
+    float horizontal, vertical; //dirX = Direction
     
     public float moveSpeed = 10f, jumpForce = 200f;
 
@@ -14,8 +14,9 @@ public class Movement : MonoBehaviour
     private Animator anim;
     private BoxCollider2D boxCollider2D;
     public float raydistance;
-    private bool isClimbing = false;
-
+    private bool Climbing = false;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -27,14 +28,14 @@ public class Movement : MonoBehaviour
     // Update is called once per frames
     void Update()
     {
-        dirX = SimpleInput.GetAxis("Horizontal");
-        rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
+        horizontal = SimpleInput.GetAxis("Horizontal");
+        rD.velocity = new Vector2(horizontal * moveSpeed, rD.velocity.y);
 
         
        
             
         // For Running Animation Que
-        if(dirX == 0)
+        if(horizontal == 0)
         {
             anim.SetBool("isRunning", false);
         }
@@ -58,7 +59,7 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
+        rD.velocity = new Vector2(horizontal * moveSpeed, rD.velocity.y);
         JumpAnim();
         Climb();
 
@@ -69,7 +70,6 @@ public class Movement : MonoBehaviour
         if (IsGrounded())
         {
             rD.velocity = Vector2.up * jumpForce;
-            Debug.Log("Jump");
         }     
     }
 
@@ -81,6 +81,7 @@ public class Movement : MonoBehaviour
 
     private void JumpAnim()
     {
+        float vertical = SimpleInput.GetAxis("Vertical");
         if (!IsGrounded())
         {
             anim.SetBool("isJumping", true);
@@ -93,28 +94,38 @@ public class Movement : MonoBehaviour
 
     public void Climb()
     {
-        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, Vector2.up, raydistance, ladderLayerMask);
+        vertical = SimpleInput.GetAxis("Vertical");
+
+        RaycastHit2D hitinfo = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.up, .07f, ladderLayerMask);
+
         if (hitinfo.collider != null)
         {
-            if (SimpleInput.GetButton("Jump"))
+            if (vertical > .95)
             {
-                isClimbing = true;
+                Climbing = true;
             }
         }
         else
         {
-            isClimbing = false;
+            Climbing = false;
+            anim.SetBool("isClimbing", false);
+            rD.constraints = RigidbodyConstraints2D.None;
         }
 
-        if (isClimbing == true)
+        if (Climbing == true)
         {
-            float inputClimb = SimpleInput.GetAxis("Vertical");
-            rD.velocity = new Vector2(inputClimb * moveSpeed, rD.position.x);
-            rD.gravityScale = 0;
+            rD.velocity = new Vector2(vertical * 1f, rD.position.x);
+            Debug.Log(vertical);
+            rD.constraints = RigidbodyConstraints2D.FreezePositionX;
+            rD.gravityScale = 80;
+            anim.SetBool("isClimbing", true);
+            anim.SetBool("isJumping", false);
         }
         else
         {
-            rD.gravityScale = 1;
+            rD.gravityScale = 2;
         }
     }
+
+
 }
