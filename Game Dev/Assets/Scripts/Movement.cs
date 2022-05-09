@@ -9,8 +9,8 @@ public class Movement : MonoBehaviour
     float dirX; //dirX = Direction
     public float moveSpeed = 10f, jumpForce = 200f;
     public float distance = 1f;
-    public LayerMask boxMask;
-    [SerializeField] private LayerMask platformLayerMask;
+   public LayerMask boxMask;
+   [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private LayerMask ladderLayerMask;
     private Animator anim;
     private BoxCollider2D boxCollider2D;
@@ -55,10 +55,13 @@ public class Movement : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-        if (hit.collider != null && hit.collider.gameObject.tag == "pushable" && Input.GetKey(KeyCode.E))
+        
+        if (hit.collider != null && hit.collider.gameObject.tag == "pushable" && SimpleInput.GetAxis("Horizontal"))
         {
             box = hit.collider.gameObject;
-
+            box.GetComponent<FixedJoint2D>().enabled = true;
+            box.GetComponent<boxpull>().beingPushed = true;
+            box.GetComponent<FixedJoint2D>().connectedBody = this.GetComponent<Rigidbody2D>();
         }
 
     }
@@ -68,7 +71,6 @@ public class Movement : MonoBehaviour
         rD.velocity = new Vector2(dirX * moveSpeed, rD.velocity.y);
         JumpAnim();
         Climb();
- 
     }
 
     public void DoJump()
@@ -123,7 +125,6 @@ public class Movement : MonoBehaviour
         {
             rD.gravityScale = 1;
         }
-
   
 }
 }
