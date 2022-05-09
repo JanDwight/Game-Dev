@@ -63,7 +63,6 @@ public class Movement : MonoBehaviour
             box.GetComponent<boxpull>().beingPushed = true;
             box.GetComponent<FixedJoint2D>().connectedBody = this.GetComponent<Rigidbody2D>();
         }
-
     }
 
     void FixedUpdate()
@@ -125,6 +124,5 @@ public class Movement : MonoBehaviour
         {
             rD.gravityScale = 1;
         }
-  
 }
 }
