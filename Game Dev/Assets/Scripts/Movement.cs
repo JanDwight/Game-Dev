@@ -110,12 +110,13 @@ public class Movement : MonoBehaviour
         {
             Climbing = false;
             anim.SetBool("isClimbing", false);
-            rD.constraints = RigidbodyConstraints2D.None & RigidbodyConstraints2D.FreezeRotation; ;
+            rD.constraints = RigidbodyConstraints2D.None;
+            rD.constraints = RigidbodyConstraints2D.FreezeRotation; ;
         }
 
         if (Climbing == true)
         {
-            rD.velocity = new Vector2(vertical * 1f, rD.position.x);
+            rD.velocity = new Vector2(vertical, 50f);
             Debug.Log(vertical);
             rD.constraints = RigidbodyConstraints2D.FreezePositionX;
             rD.gravityScale = 80;
