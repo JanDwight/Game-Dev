@@ -116,7 +116,7 @@ public class Movement : MonoBehaviour
 
         if (Climbing == true)
         {
-            rD.velocity = new Vector2(vertical, 50f);
+            rD.velocity = new Vector2(vertical, 17f);
             Debug.Log(vertical);
             rD.constraints = RigidbodyConstraints2D.FreezePositionX;
             rD.gravityScale = 80;
