@@ -4,26 +4,28 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    Rigidbody2D rD;
+    [SerializeField] private Rigidbody2D rD;
     float horizontal, vertical; //dirX = Direction
     
     public float moveSpeed = 10f, jumpForce = 200f;
 
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private LayerMask ladderLayerMask;
+    [SerializeField] private LayerMask boxMask;
     private Animator anim;
     private BoxCollider2D boxCollider2D;
     public float raydistance;
     private bool Climbing = false;
-    
-    
+
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         rD = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
-    }
+       
+    }  
+
 
     // Update is called once per frames
     void Update()
@@ -62,7 +64,6 @@ public class Movement : MonoBehaviour
         rD.velocity = new Vector2(horizontal * moveSpeed, rD.velocity.y);
         JumpAnim();
         Climb();
-
     }
 
     public void DoJump()
@@ -75,8 +76,8 @@ public class Movement : MonoBehaviour
 
     public bool IsGrounded()
     {
-        RaycastHit2D raycastHit2d = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, .07f, platformLayerMask);
-        return raycastHit2d.collider != null;
+        RaycastHit2D boxcastHit2d = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, .07f, platformLayerMask);
+        return boxcastHit2d.collider != null;
     }
 
     private void JumpAnim()
@@ -109,7 +110,7 @@ public class Movement : MonoBehaviour
         {
             Climbing = false;
             anim.SetBool("isClimbing", false);
-            rD.constraints = RigidbodyConstraints2D.None;
+            rD.constraints = RigidbodyConstraints2D.None & RigidbodyConstraints2D.FreezeRotation; ;
         }
 
         if (Climbing == true)
@@ -127,5 +128,16 @@ public class Movement : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Box") && horizontal != 0)
+        {
+            anim.SetBool("isPushing", true);
+        }
+    }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        anim.SetBool("isPushing", false);
+    }
 }
