@@ -364,6 +364,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &-4175827508107723985
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: pull
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: d94ee4225a6697a4880e40e5e7ec0fa6, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &-4173684692377637087
 AnimatorState:
   serializedVersion: 6
@@ -650,6 +676,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+ HEAD
   - m_Name: isClimbing
     m_Type: 4
     m_DefaultFloat: 0
@@ -662,6 +689,8 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+
+ 33876fa34d6b79289d3e0b56933401ba4071f646
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -1114,9 +1143,12 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 6789680667985426600}
     m_Position: {x: 1285, y: 2015, z: 0}
+ HEAD
   - serializedVersion: 1
     m_State: {fileID: -9170147876408206195}
     m_Position: {x: 1320, y: 2080, z: 0}
+
+ 33876fa34d6b79289d3e0b56933401ba4071f646
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
