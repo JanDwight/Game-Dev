@@ -16,14 +16,14 @@ public class Movement : MonoBehaviour
     private BoxCollider2D boxCollider2D;
     public float raydistance;
     private bool Climbing = false;
-
+    AudioSource footSfx;
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         rD = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
-       
+        footSfx = GetComponent<AudioSource>();
     }  
 
 
@@ -64,6 +64,7 @@ public class Movement : MonoBehaviour
         rD.velocity = new Vector2(horizontal * moveSpeed, rD.velocity.y);
         JumpAnim();
         Climb();
+        FootSfx();
     }
 
     public void DoJump()
@@ -140,5 +141,22 @@ public class Movement : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         anim.SetBool("isPushing", false);
+    }
+    public void FootSfx()
+    {
+        horizontal = SimpleInput.GetAxis("Horizontal") * moveSpeed;
+        rD.velocity = new Vector2(horizontal, rD.velocity.y);
+    
+        if(rD.velocity.x != 0) 
+        {
+            if (!footSfx.isPlaying)
+            {
+                footSfx.Play();
+            }
+            else
+            {
+                footSfx.Stop();
+            }
+        }
     }
 }
