@@ -17,7 +17,7 @@ public class Movement : MonoBehaviour
     public float raydistance;
     private bool Climbing = false;
     AudioSource footSfx;
-    // Start is called before the first frame update
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -148,6 +148,7 @@ public class Movement : MonoBehaviour
         rD.velocity = new Vector2(horizontal, rD.velocity.y);
     
         if(rD.velocity.x != 0) 
+
         {
             if (!footSfx.isPlaying)
             {
