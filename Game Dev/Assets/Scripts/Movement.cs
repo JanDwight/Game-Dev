@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {
@@ -135,6 +136,12 @@ public class Movement : MonoBehaviour
         if (collision.CompareTag("Box") && horizontal != 0)
         {
             anim.SetBool("isPushing", true);
+        }
+
+        if (collision.gameObject.CompareTag("Death"))
+        {
+            Destroy(gameObject);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
