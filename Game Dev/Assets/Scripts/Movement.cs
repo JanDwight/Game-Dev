@@ -25,6 +25,7 @@ public class Movement : MonoBehaviour
         rD = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         footSfx = GetComponent<AudioSource>();
+        jumpSound = GetComponent<AudioSource>();
     }  
 
 
@@ -65,13 +66,14 @@ public class Movement : MonoBehaviour
         rD.velocity = new Vector2(horizontal * moveSpeed, rD.velocity.y);
         JumpAnim();
         Climb();
-        FootSfx();
+      
     }
 
     public void DoJump()
     {
         if (IsGrounded())
         {
+         
             rD.velocity = Vector2.up * jumpForce;
         }     
     }
@@ -88,6 +90,7 @@ public class Movement : MonoBehaviour
         if (!IsGrounded())
         {
             anim.SetBool("isJumping", true);
+            
         }
         else
         {
@@ -149,15 +152,17 @@ public class Movement : MonoBehaviour
     {
         anim.SetBool("isPushing", false);
     }
-    public void FootSfx()
+    public void FootStepsfx()
     {
-        horizontal = SimpleInput.GetAxis("Horizontal") * moveSpeed;
-        rD.velocity = new Vector2(horizontal, rD.velocity.y);
-    
-        if(rD.velocity.x != 0) 
 
+        if (horizontal == 0)
         {
-            if (!footSfx.isPlaying)
+            anim.SetBool("isRunning", false);
+        }
+        else
+        {
+            anim.SetBool("isRunning", true);
+            if (footSfx.isPlaying)
             {
                 footSfx.Play();
             }
@@ -167,4 +172,5 @@ public class Movement : MonoBehaviour
             }
         }
     }
+    
 }
